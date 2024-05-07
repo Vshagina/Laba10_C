@@ -1,45 +1,38 @@
 ﻿using System;
 
+delegate void AccountHandler(string message);
 class FirstClass
 {
-    public event EventHandler<string> MyEvent;
-  
-    public string Name { get; }
-
+    public event AccountHandler Event;
+    private string name;
     public FirstClass(string name)
     {
-        Name = name;
+        this.name = name;
     }
- 
-    public void RaiseEvent()
+    public void GenerateEvent()
     {
-        MyEvent?.Invoke(this, Name);
+        Event.Invoke(name);
     }
 }
-
 class SecondClass
 {
- 
-    public void HandleEvent(object sender, string name)
+    private string name;
+    public SecondClass(string name)
     {
-        Console.WriteLine($"Событие сгенерировано объектом : {name}");
+        this.name = name;
+    }
+    public void HandleEvent(string eventName)
+    {
+        Console.WriteLine($"Событие {eventName} вызван через событие {name}");
     }
 }
-
 class Program
 {
     static void Main(string[] args)
     {
-  
-        FirstClass first1 = new FirstClass("Первый объект");
-        FirstClass first2 = new FirstClass("Второй объект");
-        SecondClass second = new SecondClass();
-
-        first1.MyEvent += second.HandleEvent;
-        first2.MyEvent += second.HandleEvent;
-
-        first1.RaiseEvent();
-        first2.RaiseEvent();
-
+        var first1 = new FirstClass("Первый объект");
+        var second = new SecondClass("Второй объект");
+        first1.Event += second.HandleEvent;
+        first1.GenerateEvent();
     }
 }
