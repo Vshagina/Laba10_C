@@ -11,7 +11,7 @@ class FirstClass
     }
     public void GenerateEvent()
     {
-        Event.Invoke(name);
+        Event?.Invoke(name);
     }
 }
 class SecondClass
